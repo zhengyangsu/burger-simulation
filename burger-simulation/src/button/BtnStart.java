@@ -1,16 +1,16 @@
-package main;
+package button;
 
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import util.ImageLoader;
 
 
-public class Bun extends Button{
+public class BtnStart extends Button{
 
 	// constructor
-	public Bun(float x, float y,  double s) {
+	public BtnStart(float x, float y,  double s) {
 		super(x, y, s);
-		img = ImageLoader.loadImage("src/assets/bun.png");
+		img = ImageLoader.loadImage("src/assets/BtnStart.png");
 	}
  
 	public void drawButton(Graphics2D g2) {
@@ -19,6 +19,12 @@ public class Bun extends Button{
 		g2.scale(scale, scale);
 		g2.drawImage(img, -img.getWidth()/2, -img.getHeight()/2, null);
 		g2.setTransform(transform);
+	}
+
+	@Override
+	public String descriptionInfo() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

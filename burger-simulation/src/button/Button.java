@@ -1,4 +1,4 @@
-package main;
+package button;
 
 
 import java.awt.Graphics2D;
@@ -11,6 +11,8 @@ public abstract class Button  {
 	protected PVector pos;
 	protected double scale;
 	protected BufferedImage img;
+	protected boolean hovered;
+
 
 	// constructor
 	public Button(float x, float y,  double s) {
@@ -20,6 +22,12 @@ public abstract class Button  {
  
 	public abstract void drawButton(Graphics2D g2);
 
+	public abstract String descriptionInfo();
+	
+	public String getName() {
+		return getClass().getSimpleName();
+	};
+	
 	public Rectangle2D getBounds() {
 	    double width = img.getWidth() * scale;
 	    double height = img.getHeight() * scale;
@@ -32,13 +40,21 @@ public abstract class Button  {
 	    );
 	}
 	
-	public boolean clicked(double x, double y) {
+	public boolean contains(double x, double y) {
 	    return getBounds().contains(x, y);
 	}
 	
 	public void setPos(float x, float y) {
 		pos.x = x;
 		pos.y = y;
+	}
+	
+	public void setHovered(boolean h) {
+	    hovered = h;
+	}
+
+	public boolean isHovered() {
+	    return hovered;
 	}
 }
 
