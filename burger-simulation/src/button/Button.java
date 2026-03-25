@@ -4,6 +4,8 @@ package button;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+
+import main.BurgerPanel;
 import processing.core.PVector;
 
 
@@ -55,6 +57,10 @@ public abstract class Button  {
 
 	public boolean isHovered() {
 	    return hovered;
+	}
+	
+	public boolean isVisible(BurgerPanel.State state) {
+	    return true; // default: visible everywhere
 	}
 }
 

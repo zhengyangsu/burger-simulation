@@ -18,11 +18,13 @@ import button.BinCheese;
 import button.BinPatty;
 import button.Board;
 import button.BtnExit;
+import button.BtnRestart;
 import button.BtnStart;
 import button.Button;
 import button.Pan;
 import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
+import fx.Sizzle;
 import processing.core.PVector;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -39,7 +41,7 @@ public class BurgerPanel extends JPanel implements ActionListener {
 	private PVector mPos;
 
 	// Fields for state and transitions
-	enum State {
+	public enum State {
 		INTRO,
 		PLAY,
 		END
@@ -50,6 +52,7 @@ public class BurgerPanel extends JPanel implements ActionListener {
 	private boolean binPattyClk, binBunClk, binCheeseClk, panClk, boardClk, pattyDragged;
 	private String info;
 	private State currentState;
+	private Sizzle sizzle;
 	
 	private Timer timer;
 	private Minim minim;
@@ -62,10 +65,11 @@ public class BurgerPanel extends JPanel implements ActionListener {
 		this.setBackground(Color.white);
 		setPreferredSize(new Dimension(W_WIDTH, W_HEIGHT));
 		
-		currentState = State.INTRO;
+		currentState = State.PLAY;
 		mPos = new PVector();
 		table = new Table("src/assets/intro.png");
 		staticBtn = new HashMap<>();
+		sizzle = new Sizzle(new PVector(310, 370));
 		
 		btnPopulate();
 		
@@ -87,29 +91,20 @@ public class BurgerPanel extends JPanel implements ActionListener {
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		
 		
-		//currentState = State.INTRO;
 		table.setState(currentState);
+		table.drawKitchen(g2);
+		drawBtn(g2);
 		
 		switch(currentState) {
+		
 		case INTRO:
-			table.drawKitchen(g2);
-			staticBtn.get("BtnStart").drawButton(g2);
 			break;
 			
 		case PLAY:
-			
-			table.drawKitchen(g2);
-			
-			for (Button b : staticBtn.values()) {
-				//System.out.println(b.getName());
-				if (!(b instanceof BtnStart)) b.drawButton(g2);
-				if (b.isHovered()) drawInfo(g2, b.descriptionInfo());
-			}
-			
+			sizzle.drawSizzle(g2);
 			break;
 			
 		case END:
-			table.drawKitchen(g2);
 			break;
 		}
 
@@ -131,12 +126,21 @@ public class BurgerPanel extends JPanel implements ActionListener {
 		staticBtn.put("BinCheese",  new BinCheese(470, 125, 1));
 		staticBtn.put("Pan",  new Pan(310, 420, 1));
 		staticBtn.put("Board",  new Board(900, 410, 1));
-		staticBtn.put("BtnStart",  new BtnStart(470, 125, 1));
+		staticBtn.put("BtnStart",  new BtnStart(1100, 675, 1));
 		staticBtn.put("BtnExit",  new BtnExit(1100, 675, 1));
-		
+		staticBtn.put("BtnRestart",  new BtnRestart(1100, 675, 1));
 
-		
 	}
+	
+	private void drawBtn(Graphics2D g2) {
+		for (Button b : staticBtn.values()) {
+			if (b.isVisible(currentState) ) {
+				b.drawButton(g2);
+				if (b.isHovered()) drawInfo(g2, b.descriptionInfo());
+			}
+		}
+	}
+	
 	
 	public void drawInfo(Graphics2D g, String info) {
 		
@@ -144,8 +148,8 @@ public class BurgerPanel extends JPanel implements ActionListener {
 		
 		AffineTransform at = g.getTransform();
 		g.translate(100, 675);
-		g.setFont(new Font("Courier", Font.PLAIN, 12));
-		g.setColor(Color.blue.darker());
+		g.setFont(new Font("Pixelify", Font.BOLD, 16));
+		g.setColor(new Color(0x21170E));
 		g.drawString(info, 0, 0);
 		g.setTransform(at);
 	}
@@ -162,8 +166,6 @@ public class BurgerPanel extends JPanel implements ActionListener {
 	
 	public class MyMouseListener extends MouseAdapter {
 
-		
-		
 		public void mouseMoved(MouseEvent e) {
 			
 			mPos.x = e.getX();
@@ -184,11 +186,13 @@ public class BurgerPanel extends JPanel implements ActionListener {
 			switch(currentState) {
 				case INTRO:
 					if (staticBtn.get("BtnStart").contains(mPos.x, mPos.y)) currentState = State.PLAY;
-					
+					break;
 				case PLAY:
 					if (staticBtn.get("BtnExit").contains(mPos.x, mPos.y)) currentState = State.END;
-
+					break;
 				case END:
+					if (staticBtn.get("BtnRestart").contains(mPos.x, mPos.y)) currentState = State.INTRO;
+					break;
 			}
 			
 		}

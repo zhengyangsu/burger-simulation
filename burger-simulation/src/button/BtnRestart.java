@@ -7,12 +7,12 @@ import main.BurgerPanel;
 import util.ImageLoader;
 
 
-public class Pan extends Button{
+public class BtnRestart extends Button{
 
 	// constructor
-	public Pan(float x, float y,  double s) {
+	public BtnRestart(float x, float y,  double s) {
 		super(x, y, s);
-		img = ImageLoader.loadImage("src/assets/pan.png");
+		img = ImageLoader.loadImage("src/assets/BtnRestart.png");
 	}
  
 	public void drawButton(Graphics2D g2) {
@@ -26,12 +26,12 @@ public class Pan extends Button{
 	@Override
 	public String descriptionInfo() {
 		// TODO Auto-generated method stub
-		return null;
+		return "Click to restart game";
 	}
 
 	@Override
 	public boolean isVisible(BurgerPanel.State state) {
-        return state == BurgerPanel.State.PLAY;
+        return state == BurgerPanel.State.END;
     }
-	
+
 }

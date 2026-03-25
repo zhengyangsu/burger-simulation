@@ -2,6 +2,8 @@ package button;
 
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
+
+import main.BurgerPanel;
 import util.ImageLoader;
 
 
@@ -24,8 +26,12 @@ public class BtnStart extends Button{
 	@Override
 	public String descriptionInfo() {
 		// TODO Auto-generated method stub
-		return null;
+		return "Click to start game";
 	}
 
-
+	@Override
+	public boolean isVisible(BurgerPanel.State state) {
+        return state == BurgerPanel.State.INTRO;
+    }
+	
 }

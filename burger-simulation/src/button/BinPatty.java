@@ -2,6 +2,8 @@ package button;
 
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
+
+import main.BurgerPanel;
 import util.ImageLoader;
 
 
@@ -27,5 +29,9 @@ public class BinPatty extends Button{
 		return null;
 	}
 
-
+	@Override
+	public boolean isVisible(BurgerPanel.State state) {
+        return state == BurgerPanel.State.PLAY;
+    }
+	
 }
