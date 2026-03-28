@@ -51,7 +51,6 @@ public class BurgerPanel extends JPanel implements ActionListener {
 	private boolean binPattyClk, binBunClk, binCheeseClk, panClk, boardClk, pattyDragged;
 	private State currentState;
 	private Fire fire;
-	private InfoLabel info;
 
 	private JFrame frame;
 	private Timer timer;
@@ -71,7 +70,6 @@ public class BurgerPanel extends JPanel implements ActionListener {
 		table = new Table("src/assets/intro.png");
 		staticBtn = new HashMap<>();
 		fire = new Fire(300, 365);
-		info = new InfoLabel(100, 675);
 		btnPopulate();
 
 		minim = new Minim(new MinimHelper());
@@ -92,6 +90,10 @@ public class BurgerPanel extends JPanel implements ActionListener {
 
 		table.setState(currentState);
 		table.drawKitchen(g2);
+		InfoLabel info = new InfoLabel(920, 175);
+		info.setText(table.getInfo());
+		info.draw(g2);
+		
 
 		switch (currentState) {
 
@@ -123,7 +125,8 @@ public class BurgerPanel extends JPanel implements ActionListener {
 		staticBtn.put("BinBun", new BinBun(150, 115, 1));
 		staticBtn.put("BinPatty", new BinPatty(310, 120, 1));
 		staticBtn.put("BinCheese", new BinCheese(470, 125, 1));
-		staticBtn.put("Pan", new Pan(310, 420, 1));
+		//staticBtn.put("Pan", new Pan(310, 420, 1));
+		staticBtn.put("Pan", new Pan(710, 420, 1));
 		staticBtn.put("Board", new Board(900, 410, 1));
 		staticBtn.put("BtnStart", new BtnStart(1100, 675, 1));
 		staticBtn.put("BtnExit", new BtnExit(1100, 675, 1));
@@ -145,21 +148,9 @@ public class BurgerPanel extends JPanel implements ActionListener {
 			}
 
 		}
+		InfoLabel info = new InfoLabel(100, 675);
 		info.setText(hoverText);
 		info.draw(g2);
-	}
-
-	public void drawInfo(Graphics2D g, String info) {
-
-		if (info == null)
-			return;
-
-		AffineTransform at = g.getTransform();
-		g.translate(100, 675);
-		g.setFont(new Font("Pixelify", Font.BOLD, 16));
-		g.setColor(new Color(0x21170E));
-		g.drawString(info, 0, 0);
-		g.setTransform(at);
 	}
 
 	private void loadMusic() {

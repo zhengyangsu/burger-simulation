@@ -2,6 +2,7 @@ package main;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.geom.AffineTransform;
@@ -42,8 +43,16 @@ public class InfoLabel {
 
 		g.translate(pos.x, pos.y);
 		g.setFont(font);
-		g.setColor(new Color(0x21170E));
-		g.drawString(text.toUpperCase(java.util.Locale.ROOT), 0, 0);
+		g.setColor(Color.decode("#66472B"));
+		
+		String[] lines = text.split("\n");
+	    FontMetrics fm = g.getFontMetrics();
+	    int leading = fm.getHeight();
+
+	    for (int i = 0; i < lines.length; i++) {
+	        g.drawString(lines[i].toUpperCase(java.util.Locale.ROOT), 0, i * leading);
+	    }
+		
 
 		g.setTransform(at);
 	}
