@@ -2,7 +2,7 @@ package main;
 
 import javax.swing.JFrame;
 
-public class BurgerApp extends JFrame{
+public class BurgerApp extends JFrame {
 	/**
 	 * 
 	 */
@@ -14,14 +14,14 @@ public class BurgerApp extends JFrame{
 		this.setLocation(0, 0);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		BurgerPanel bpnl = new BurgerPanel(this);
-		this.add(bpnl); 
+		this.add(bpnl);
 		this.pack();
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 	}
-	
-	public static void main (String[] args){
+
+	public static void main(String[] args) {
 		new BurgerApp("BurgerApp");
-		
+
 	}
 }
