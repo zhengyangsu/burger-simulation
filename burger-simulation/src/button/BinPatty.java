@@ -6,32 +6,31 @@ import java.awt.geom.AffineTransform;
 import main.BurgerPanel;
 import util.ImageLoader;
 
-
-public class BinPatty extends Button{
+public class BinPatty extends Button {
 
 	// constructor
-	public BinPatty(float x, float y,  double s) {
+	public BinPatty(float x, float y, double s) {
 		super(x, y, s);
 		img = ImageLoader.loadImage("src/assets/binPatty.png");
 	}
- 
+
 	public void drawButton(Graphics2D g2) {
 		AffineTransform transform = g2.getTransform();
 		g2.translate(pos.x, pos.y);
 		g2.scale(scale, scale);
-		g2.drawImage(img, -img.getWidth()/2, -img.getHeight()/2, null);
+		g2.drawImage(img, -img.getWidth() / 2, -img.getHeight() / 2, null);
 		g2.setTransform(transform);
 	}
 
 	@Override
 	public String descriptionInfo() {
 		// TODO Auto-generated method stub
-		return null;
+		return "Click and drag patty to flying pan";
 	}
 
 	@Override
 	public boolean isVisible(BurgerPanel.State state) {
-        return state == BurgerPanel.State.PLAY;
-    }
-	
+		return state == BurgerPanel.State.PLAY;
+	}
+
 }

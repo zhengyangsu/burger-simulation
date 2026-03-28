@@ -49,10 +49,11 @@ public class BurgerPanel extends JPanel implements ActionListener {
 	private Table table;
 	private HashMap<String, Button> staticBtn;
 	private boolean binPattyClk, binBunClk, binCheeseClk, panClk, boardClk, pattyDragged;
-	private String info;
 	private State currentState;
 	private Fire fire;
+	private InfoLabel info;
 
+	private JFrame frame;
 	private Timer timer;
 	private Minim minim;
 	private AudioPlayer bkmusic, click, open, close, drag;
@@ -63,13 +64,14 @@ public class BurgerPanel extends JPanel implements ActionListener {
 
 		this.setBackground(Color.white);
 		setPreferredSize(new Dimension(W_WIDTH, W_HEIGHT));
+		this.frame = frame;
 
-		currentState = State.PLAY;
+		currentState = State.INTRO;
 		mPos = new PVector();
 		table = new Table("src/assets/intro.png");
 		staticBtn = new HashMap<>();
 		fire = new Fire(300, 365);
-
+		info = new InfoLabel(100, 675);
 		btnPopulate();
 
 		minim = new Minim(new MinimHelper());
@@ -90,19 +92,20 @@ public class BurgerPanel extends JPanel implements ActionListener {
 
 		table.setState(currentState);
 		table.drawKitchen(g2);
-		
 
 		switch (currentState) {
 
 		case INTRO:
+			drawBtn(g2);
 			break;
 
 		case PLAY:
-			fire.drawFire(g2, 150, 10);
+			fire.drawFire(g2, 120, 10);
 			drawBtn(g2);
 			break;
 
 		case END:
+			drawBtn(g2);
 			break;
 		}
 
@@ -115,7 +118,6 @@ public class BurgerPanel extends JPanel implements ActionListener {
 		repaint();
 	}
 
-	
 	private void btnPopulate() {
 
 		staticBtn.put("BinBun", new BinBun(150, 115, 1));
@@ -130,13 +132,21 @@ public class BurgerPanel extends JPanel implements ActionListener {
 	}
 
 	private void drawBtn(Graphics2D g2) {
+		String hoverText = null;
+
 		for (Button b : staticBtn.values()) {
+
 			if (b.isVisible(currentState)) {
 				b.drawButton(g2);
+				if (b.isHovered()) {
+
+					hoverText = b.descriptionInfo();
+				}
 			}
-			if (b.isHovered()) drawInfo(g2, b.descriptionInfo());
-			
+
 		}
+		info.setText(hoverText);
+		info.draw(g2);
 	}
 
 	public void drawInfo(Graphics2D g, String info) {
@@ -177,6 +187,7 @@ public class BurgerPanel extends JPanel implements ActionListener {
 			mPos.y = e.getY();
 
 			switch (currentState) {
+
 			case INTRO:
 				if (staticBtn.get("BtnStart").contains(mPos.x, mPos.y))
 					currentState = State.PLAY;
@@ -186,8 +197,11 @@ public class BurgerPanel extends JPanel implements ActionListener {
 					currentState = State.END;
 				break;
 			case END:
-				if (staticBtn.get("BtnRestart").contains(mPos.x, mPos.y))
-					currentState = State.INTRO;
+				if (staticBtn.get("BtnRestart").contains(mPos.x, mPos.y)) {
+					frame.dispose();
+					new BurgerApp("BurgerApp");
+				}
+
 				break;
 			}
 
@@ -204,7 +218,8 @@ public class BurgerPanel extends JPanel implements ActionListener {
 			mPos.y = e.getY();
 
 			for (Button b : staticBtn.values()) {
-				if (b.contains(mPos.x, mPos.y)) b.setPos(mPos.x, mPos.y);
+				if (b.contains(mPos.x, mPos.y) && b.isMovable())
+					b.setPos(mPos.x, mPos.y);
 			}
 
 		}

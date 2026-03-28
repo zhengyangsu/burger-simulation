@@ -11,12 +11,13 @@ public abstract class Button {
 	protected PVector pos;
 	protected double scale;
 	protected BufferedImage img;
-	protected boolean hovered;
+	protected boolean hovered, movable;
 
 	// constructor
 	public Button(float x, float y, double s) {
 		pos = new PVector(x, y);
 		scale = s;
+		movable = false;
 	}
 
 	public abstract void drawButton(Graphics2D g2);
@@ -51,7 +52,11 @@ public abstract class Button {
 		return hovered;
 	}
 
+	public boolean isMovable() {
+		return movable;
+	}
+
 	public boolean isVisible(BurgerPanel.State state) {
-		return true; //default: visible everywhere
+		return true; // default: visible everywhere
 	}
 }

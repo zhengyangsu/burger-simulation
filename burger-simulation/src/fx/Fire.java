@@ -1,3 +1,7 @@
+/*
+ * Fire fx place on top of fire, generate with recursive function
+ */
+
 package fx;
 
 import java.awt.Color;
@@ -14,24 +18,22 @@ public class Fire {
 	private int cx, cy;
 	private Area fA;
 
-	
 	public Fire(int x, int y) {
 		cx = x;
 		cy = y;
 		fA = new Area();
 
 	}
-	
 
 	public void drawFire(Graphics2D g2, int r, double rot) {
-		
+
 		int radius = r;
 		if (radius < 5)
 			return;
 
 		AffineTransform old = g2.getTransform();
 
-		//rotate around center
+		// rotate around center
 		g2.rotate(rot, cx, cy);
 
 		GeneralPath path = new GeneralPath();
@@ -39,7 +41,7 @@ public class Fire {
 		for (int i = 0; i <= 360; i += 16) {
 			double angle = Math.toRadians(i);
 
-			int variation = rand.nextInt(radius/2 + 1) - radius/10;//jagged edge
+			int variation = rand.nextInt(radius / 2 + 1) - radius / 10;// jagged edge
 			int rVar = radius + variation;
 
 			double x = cx + rVar * Math.cos(angle);
@@ -53,28 +55,34 @@ public class Fire {
 
 		path.closePath();
 
-		//color gradient
+		// color gradient
 		float t = radius / 100.0f;
-		t = Math.max(0, Math.min(1, t)); //clamp between 0 to 1
-		t = (float)Math.pow(t,3);
+		t = Math.max(0, Math.min(1, t)); // clamp between 0 to 1
+		t = (float) Math.pow(t, 3);
 		int red = 255;
 		int green = (int) (255 * (1 - t));
 
 		g2.setColor(new Color(red, green, 0, 120));
 		g2.fill(path);
-		
-		if (fA.isEmpty()) fA.add(new Area(path));
-		
+
+		if (fA.isEmpty())
+			fA.add(new Area(path));
+
 		g2.setTransform(old);
 
 		double nextRot = rot + (rand.nextDouble() - 0.5) * 0.5;
 
-		//recursion with shrink
+		// recursion with shrink
 		drawFire(g2, (int) (radius * 0.8), nextRot);
 	}
 
 	public Rectangle2D getBounds() {
-		return fA.getBounds2D();
+
+		Rectangle2D bounds = fA.getBounds2D();
+
+		double shrink = 100; // pixels smaller collision area
+		return new Rectangle2D.Double(bounds.getX() + shrink, bounds.getY() + shrink, bounds.getWidth() - 2 * shrink,
+				bounds.getHeight() - 2 * shrink);
 	}
-	
+
 }

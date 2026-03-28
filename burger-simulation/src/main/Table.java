@@ -22,9 +22,9 @@ public class Table {
 		// TODO Auto-generated method stub
 
 		// currentState = s;
-		String intro = "src/assets/intro.png";
+		String intro = "src/assets/Intro.png";
 		String play = "src/assets/table.png";
-		String end = "src/assets/end.png";
+		String end = "src/assets/Outro.png";
 
 		switch (s) {
 		case INTRO:
