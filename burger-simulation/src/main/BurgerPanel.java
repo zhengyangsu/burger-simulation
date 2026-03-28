@@ -70,6 +70,7 @@ public class BurgerPanel extends JPanel implements ActionListener {
 		table = new Table("src/assets/intro.png");
 		staticBtn = new HashMap<>();
 		fire = new Fire(300, 365);
+		// InfoLabel info = new InfoLabel(0, 0);
 		btnPopulate();
 
 		minim = new Minim(new MinimHelper());
@@ -88,16 +89,12 @@ public class BurgerPanel extends JPanel implements ActionListener {
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-		table.setState(currentState);
 		table.drawKitchen(g2);
-		InfoLabel info = new InfoLabel(920, 175);
-		info.setText(table.getInfo());
-		info.draw(g2);
-		
 
 		switch (currentState) {
 
 		case INTRO:
+			displayInfo(g2, 920, 175, table.getInfo());
 			drawBtn(g2);
 			break;
 
@@ -107,6 +104,7 @@ public class BurgerPanel extends JPanel implements ActionListener {
 			break;
 
 		case END:
+			displayInfo(g2, 120, 175, table.getInfo());
 			drawBtn(g2);
 			break;
 		}
@@ -116,7 +114,19 @@ public class BurgerPanel extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		((Pan) staticBtn.get("Pan")).onFire(fire);
+		table.setState(currentState);
+		switch (currentState) {
+		case INTRO:
+			break;
+
+		case PLAY:
+			((Pan) staticBtn.get("Pan")).onFire(fire);// Elevate fire
+			break;
+
+		case END:
+			break;
+		}
+
 		repaint();
 	}
 
@@ -125,7 +135,7 @@ public class BurgerPanel extends JPanel implements ActionListener {
 		staticBtn.put("BinBun", new BinBun(150, 115, 1));
 		staticBtn.put("BinPatty", new BinPatty(310, 120, 1));
 		staticBtn.put("BinCheese", new BinCheese(470, 125, 1));
-		//staticBtn.put("Pan", new Pan(310, 420, 1));
+		// staticBtn.put("Pan", new Pan(310, 420, 1));
 		staticBtn.put("Pan", new Pan(710, 420, 1));
 		staticBtn.put("Board", new Board(900, 410, 1));
 		staticBtn.put("BtnStart", new BtnStart(1100, 675, 1));
@@ -142,15 +152,18 @@ public class BurgerPanel extends JPanel implements ActionListener {
 			if (b.isVisible(currentState)) {
 				b.drawButton(g2);
 				if (b.isHovered()) {
-
 					hoverText = b.descriptionInfo();
 				}
 			}
 
 		}
-		InfoLabel info = new InfoLabel(100, 675);
-		info.setText(hoverText);
-		info.draw(g2);
+		displayInfo(g2, 100, 675, hoverText);
+	}
+
+	private void displayInfo(Graphics2D g, int x, int y, String s) {
+		InfoLabel info = new InfoLabel(x, y);
+		info.setText(s);
+		info.draw(g);
 	}
 
 	private void loadMusic() {

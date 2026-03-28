@@ -56,4 +56,9 @@ public class InfoLabel {
 
 		g.setTransform(at);
 	}
+	
+	public void setPos(int x, int y) {
+		pos.x = x;
+		pos.y = y;
+	}
 }
