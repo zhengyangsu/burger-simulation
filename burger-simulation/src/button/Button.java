@@ -1,9 +1,9 @@
 package button;
 
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-
 import main.BurgerPanel;
 import processing.core.PVector;
 
@@ -12,17 +12,27 @@ public abstract class Button {
 	protected double scale;
 	protected BufferedImage img;
 	protected boolean hovered, movable;
+	protected String description;
 
 	// constructor
 	public Button(float x, float y, double s) {
 		pos = new PVector(x, y);
 		scale = s;
 		movable = false;
+		description = "";
 	}
 
-	public abstract void drawButton(Graphics2D g2);
+	public void drawButton(Graphics2D g2) {
+		AffineTransform transform = g2.getTransform();
+		g2.translate(pos.x, pos.y);
+		g2.scale(scale, scale);
+		g2.drawImage(img, -img.getWidth() / 2, -img.getHeight() / 2, null);
+		g2.setTransform(transform);
+	};
 
-	public abstract String descriptionInfo();
+	public String descriptionInfo() {
+		return description;
+	}
 
 	public String getName() {
 		return getClass().getSimpleName();
