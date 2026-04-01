@@ -4,13 +4,13 @@ import java.awt.Graphics2D;
 
 import util.ImageLoader;
 
-public class BtnCheese extends Button implements Ingrident {
+public class BtnBun extends Button implements Ingrident {
 
-	public BtnCheese(float x, float y, double s) {
+	public BtnBun(float x, float y, double s) {
 		super(x, y, s);
 		// TODO Auto-generated constructor stub
 		movable = true;
-		img = ImageLoader.loadImage("src/assets/cheese.png");
+		img = ImageLoader.loadImage("src/assets/buns.png");
 		description = "Click and drag cheese to bun";
 	}
 

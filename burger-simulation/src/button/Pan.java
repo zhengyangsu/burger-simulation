@@ -11,14 +11,18 @@ import util.ImageLoader;
 
 public class Pan extends Button {
 	Sizzle sizzle;
-	boolean onFire;
+	BtnPatty patty;
+	boolean onFire, pattyReady;
+	int sizzleTimer;
 
 	// constructor
 	public Pan(float x, float y, double s) {
 		super(x, y, s);
 		img = ImageLoader.loadImage("src/assets/pan.png");
 		sizzle = new Sizzle(new PVector(x, y - 50));// pan not centered due to handle
+		sizzleTimer = 0;
 		onFire = false;
+		pattyReady = false;
 		movable = true;
 		description = "Place it on stove to fly patty";
 	}
@@ -30,6 +34,16 @@ public class Pan extends Button {
 			sizzle.setPos(pos);
 			sizzle.drawSizzle(g2);
 		}
+		
+		if(patty != null) {
+			patty.setPos(pos.x, pos.y - 50);
+			patty.drawButton(g2);
+			sizzleTimer++;
+			if (sizzleTimer > 60) { // after 1 second, patty is ready
+				pattyReady = true;
+				patty.changeState();
+			}
+		}
 
 	}
 
@@ -38,6 +52,21 @@ public class Pan extends Button {
 		return state == BurgerPanel.State.PLAY;
 	}
 
+	public boolean pattyReady() {
+		return pattyReady;
+	}
+	
+	public void removePatty() {
+		patty = null;
+		pattyReady = false;
+		sizzleTimer = 0;
+	}
+	
+	public void flyPatty() {
+		patty = new BtnPatty(pos.x, pos.y - 50, 1);
+		
+	}
+	
 	public void onFire(Fire f) {
 		onFire = getBounds().intersects(f.getBounds());
 	}

@@ -18,6 +18,8 @@ import button.BinCheese;
 import button.BinPatty;
 import button.Board;
 import button.BtnExit;
+import button.BtnFactory;
+import button.BtnPatty;
 import button.BtnRestart;
 import button.BtnStart;
 import button.Button;
@@ -46,11 +48,13 @@ public class BurgerPanel extends JPanel implements ActionListener {
 		INTRO, PLAY, END
 	};
 
+	private State currentState;
 	private Table table;
 	private HashMap<String, Button> staticBtn;
-	private boolean binPattyClk, binBunClk, binCheeseClk, panClk, boardClk, pattyDragged;
-	private State currentState;
+	private HashMap<String, Button> dynamicBtn;
+	private Button btnDragged;
 	private Fire fire;
+	private boolean hasBun, hasPatty, hasCheese;
 
 	private JFrame frame;
 	private Timer timer;
@@ -69,8 +73,8 @@ public class BurgerPanel extends JPanel implements ActionListener {
 		mPos = new PVector();
 		table = new Table("src/assets/intro.png");
 		staticBtn = new HashMap<>();
+		dynamicBtn = new HashMap<>();
 		fire = new Fire(300, 365);
-		// InfoLabel info = new InfoLabel(0, 0);
 		btnPopulate();
 
 		minim = new Minim(new MinimHelper());
@@ -101,6 +105,9 @@ public class BurgerPanel extends JPanel implements ActionListener {
 		case PLAY:
 			fire.drawFire(g2, 120, 10);
 			drawBtn(g2);
+			if (btnDragged != null) {
+				btnDragged.drawButton(g2);
+			}
 			break;
 
 		case END:
@@ -135,7 +142,6 @@ public class BurgerPanel extends JPanel implements ActionListener {
 		staticBtn.put("BinBun", new BinBun(150, 115, 1));
 		staticBtn.put("BinPatty", new BinPatty(310, 120, 1));
 		staticBtn.put("BinCheese", new BinCheese(470, 125, 1));
-		// staticBtn.put("Pan", new Pan(310, 420, 1));
 		staticBtn.put("Pan", new Pan(710, 420, 1));
 		staticBtn.put("Board", new Board(900, 410, 1));
 		staticBtn.put("BtnStart", new BtnStart(1100, 675, 1));
@@ -178,10 +184,9 @@ public class BurgerPanel extends JPanel implements ActionListener {
 			mPos.x = e.getX();
 			mPos.y = e.getY();
 
-			// chk mouse loc for btn description
+			// chk mouse loc for btn description when hovering
 			for (Button b : staticBtn.values()) {
 				b.setHovered(b.contains(mPos.x, mPos.y));
-
 			}
 
 		}
@@ -196,16 +201,18 @@ public class BurgerPanel extends JPanel implements ActionListener {
 				if (staticBtn.get("BtnStart").contains(mPos.x, mPos.y))
 					currentState = State.PLAY;
 				break;
+
 			case PLAY:
 				if (staticBtn.get("BtnExit").contains(mPos.x, mPos.y))
 					currentState = State.END;
+
 				break;
+
 			case END:
 				if (staticBtn.get("BtnRestart").contains(mPos.x, mPos.y)) {
 					frame.dispose();
 					new BurgerApp("BurgerApp");
 				}
-
 				break;
 			}
 
@@ -215,22 +222,86 @@ public class BurgerPanel extends JPanel implements ActionListener {
 			mPos.x = e.getX();
 			mPos.y = e.getY();
 
+			for (Button b : staticBtn.values()) {
+				if (b.contains(mPos.x, mPos.y)) {
+
+					switch (b.getClass().getSimpleName()) {
+					case "BinPatty":
+						btnDragged = BtnFactory.createBtn("BtnPatty");
+						break;
+					case "BinBun":
+						btnDragged = BtnFactory.createBtn("BtnBun");
+						break;
+					case "BinCheese":
+						btnDragged = BtnFactory.createBtn("BtnCheese");
+						break;
+					case "Pan":
+						if (((Pan) b).pattyReady()) {
+							((Pan) b).removePatty();
+							btnDragged = BtnFactory.createBtn("BtnPatty");
+							((BtnPatty) btnDragged).changeState();
+						}
+						break;
+					}
+				}
+			}
+
 		}
 
 		public void mouseDragged(MouseEvent e) {
 			mPos.x = e.getX();
 			mPos.y = e.getY();
 
-			for (Button b : staticBtn.values()) {
-				if (b.contains(mPos.x, mPos.y) && b.isMovable())
-					b.setPos(mPos.x, mPos.y);
+			if (btnDragged != null) {
+				btnDragged.setPos(mPos.x, mPos.y);
 			}
+
+			else
+				for (Button b : staticBtn.values()) {
+					if (b.contains(mPos.x, mPos.y) && b.isMovable())
+						b.setPos(mPos.x, mPos.y);
+				}
 
 		}
 
 		public void mouseReleased(MouseEvent e) {
-			pattyDragged = false;
 
+			mPos.x = e.getX();
+			mPos.y = e.getY();
+
+			if (btnDragged != null) {
+
+				if (staticBtn.get("Pan").contains(mPos.x, mPos.y)
+						&& btnDragged.getClass().getSimpleName().equals("BtnPatty")) {
+					
+					((Pan) staticBtn.get("Pan")).flyPatty();
+				}
+
+				else if (staticBtn.get("Board").contains(mPos.x, mPos.y)) {
+
+					switch (btnDragged.getClass().getSimpleName()) {
+
+					case "BtnBun":
+						dynamicBtn.put("BunTop", BtnFactory.createBtn("BtnBunTop"));
+						dynamicBtn.put("BunBottom", BtnFactory.createBtn("BtnBunBottom"));
+						break;
+					case "BtnPatty":
+						if (((BtnPatty) btnDragged).isCooked()) {
+							dynamicBtn.put("Patty", BtnFactory.createBtn("BtnPatty"));
+						}
+						dynamicBtn.put("Patty", BtnFactory.createBtn("BtnPatty"));
+						((BtnPatty) dynamicBtn.get("Patty")).changeState();
+						break;
+					case "BtnCheese":
+						dynamicBtn.put("Cheese", btnDragged);
+						break;
+					}
+
+				}
+
+			}
+
+			btnDragged = null; // release
 		}
 
 	}
