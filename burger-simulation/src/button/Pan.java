@@ -1,7 +1,6 @@
 package button;
 
 import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
 
 import fx.Fire;
 import fx.Sizzle;
@@ -34,8 +33,8 @@ public class Pan extends Button {
 			sizzle.setPos(pos);
 			sizzle.drawSizzle(g2);
 		}
-		
-		if(patty != null) {
+
+		if (patty != null) {
 			patty.setPos(pos.x, pos.y - 50);
 			patty.drawButton(g2);
 			sizzleTimer++;
@@ -55,18 +54,18 @@ public class Pan extends Button {
 	public boolean pattyReady() {
 		return pattyReady;
 	}
-	
+
 	public void removePatty() {
 		patty = null;
 		pattyReady = false;
 		sizzleTimer = 0;
 	}
-	
+
 	public void flyPatty() {
-		patty = new BtnPatty(pos.x, pos.y - 50, 1);
-		
+		patty = new BtnPatty(pos.x, pos.y - 50, 1.15);
+
 	}
-	
+
 	public void onFire(Fire f) {
 		onFire = getBounds().intersects(f.getBounds());
 	}

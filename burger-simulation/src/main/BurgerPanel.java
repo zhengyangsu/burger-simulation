@@ -2,7 +2,6 @@ package main;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -10,9 +9,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.geom.AffineTransform;
 import java.util.HashMap;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.Timer;
+
 import button.BinBun;
 import button.BinCheese;
 import button.BinPatty;
@@ -23,14 +25,13 @@ import button.BtnPatty;
 import button.BtnRestart;
 import button.BtnStart;
 import button.Button;
+import button.Ingredient;
+import button.IngredientDecorator;
 import button.Pan;
 import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
 import fx.Fire;
-import fx.Sizzle;
 import processing.core.PVector;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 import util.MinimHelper;
 
 @SuppressWarnings("serial")
@@ -49,13 +50,14 @@ public class BurgerPanel extends JPanel implements ActionListener {
 	};
 
 	private State currentState;
+
 	private Table table;
 	private HashMap<String, Button> staticBtn;
-	private HashMap<String, Button> dynamicBtn;
 	private Button btnDragged;
 	private Fire fire;
-	private boolean hasBun, hasPatty, hasCheese;
-
+	private Ingredient burger;
+	private int counter;
+	private boolean completed;
 	private JFrame frame;
 	private Timer timer;
 	private Minim minim;
@@ -73,12 +75,13 @@ public class BurgerPanel extends JPanel implements ActionListener {
 		mPos = new PVector();
 		table = new Table("src/assets/intro.png");
 		staticBtn = new HashMap<>();
-		dynamicBtn = new HashMap<>();
 		fire = new Fire(300, 365);
 		btnPopulate();
+		counter = 0;
+		completed = false;
 
 		minim = new Minim(new MinimHelper());
-		// loadMusic();
+		loadMusic();
 
 		MyMouseListener ml = new MyMouseListener();
 		addMouseListener(ml);
@@ -108,6 +111,19 @@ public class BurgerPanel extends JPanel implements ActionListener {
 			if (btnDragged != null) {
 				btnDragged.drawButton(g2);
 			}
+
+			if (burger != null) {
+				burger.decorate(g2);
+			}
+
+			if (completed) {
+				counter++;
+				if (counter > 60) { // after 1 second, move to end screen
+					currentState = State.END;
+					counter = 0;
+				}
+			}
+
 			break;
 
 		case END:
@@ -211,6 +227,7 @@ public class BurgerPanel extends JPanel implements ActionListener {
 			case END:
 				if (staticBtn.get("BtnRestart").contains(mPos.x, mPos.y)) {
 					frame.dispose();
+					bkmusic.close();
 					new BurgerApp("BurgerApp");
 				}
 				break;
@@ -225,7 +242,7 @@ public class BurgerPanel extends JPanel implements ActionListener {
 			for (Button b : staticBtn.values()) {
 				if (b.contains(mPos.x, mPos.y)) {
 
-					switch (b.getClass().getSimpleName()) {
+					switch (b.getName()) {
 					case "BinPatty":
 						btnDragged = BtnFactory.createBtn("BtnPatty");
 						break;
@@ -271,29 +288,32 @@ public class BurgerPanel extends JPanel implements ActionListener {
 
 			if (btnDragged != null) {
 
-				if (staticBtn.get("Pan").contains(mPos.x, mPos.y)
-						&& btnDragged.getClass().getSimpleName().equals("BtnPatty")) {
-					
+				if (staticBtn.get("Pan").contains(mPos.x, mPos.y) && btnDragged.getName().equals("BtnPatty")) {
+
 					((Pan) staticBtn.get("Pan")).flyPatty();
 				}
 
 				else if (staticBtn.get("Board").contains(mPos.x, mPos.y)) {
 
-					switch (btnDragged.getClass().getSimpleName()) {
+					switch (btnDragged.getName()) {
 
 					case "BtnBun":
-						dynamicBtn.put("BunTop", BtnFactory.createBtn("BtnBunTop"));
-						dynamicBtn.put("BunBottom", BtnFactory.createBtn("BtnBunBottom"));
+						if (burger == null)
+							burger = BtnFactory.createBurger("IngrBunBottom", null);
+						else {
+							burger = BtnFactory.createBurger("IngrBunTop", (IngredientDecorator) burger);
+							completed = true;
+						}
+
 						break;
 					case "BtnPatty":
 						if (((BtnPatty) btnDragged).isCooked()) {
-							dynamicBtn.put("Patty", BtnFactory.createBtn("BtnPatty"));
+							burger = BtnFactory.createBurger("IngrPatty", (IngredientDecorator) burger);
 						}
-						dynamicBtn.put("Patty", BtnFactory.createBtn("BtnPatty"));
-						((BtnPatty) dynamicBtn.get("Patty")).changeState();
+
 						break;
 					case "BtnCheese":
-						dynamicBtn.put("Cheese", btnDragged);
+						burger = BtnFactory.createBurger("IngrCheese", (IngredientDecorator) burger);
 						break;
 					}
 

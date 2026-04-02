@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 
 import util.ImageLoader;
 
-public class BtnPatty extends Button implements Ingrident {
+public class BtnPatty extends IngredientDecorator {
 	enum PattyState {
 		RAW, COOKED
 	}
@@ -19,10 +19,12 @@ public class BtnPatty extends Button implements Ingrident {
 		img = ImageLoader.loadImage("src/assets/pattyRaw.png");
 	}
 
-	@Override
-	public void assemble(Button b, Graphics2D g2) {
-		b.drawButton(g2);
-		drawButton(g2);
+	// Override
+	public BtnPatty(IngredientDecorator base, float x, float y, double s) {
+		super(base, x, y, s);
+		// TODO Auto-generated constructor stub
+		state = PattyState.COOKED;
+		img = ImageLoader.loadImage("src/assets/pattyCooked.png");
 	}
 
 	public void changeState() {
@@ -31,9 +33,16 @@ public class BtnPatty extends Button implements Ingrident {
 			img = ImageLoader.loadImage("src/assets/pattyCooked.png");
 		}
 	}
-	
+
 	public boolean isCooked() {
-		return state == PattyState.COOKED;	
+		return state == PattyState.COOKED;
+	}
+
+	@Override
+	public void decorate(Graphics2D g2) {
+		// TODO Auto-generated method stub
+		super.decorate(g2);
+		drawButton(g2);
 	}
 
 }

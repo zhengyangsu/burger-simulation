@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import main.BurgerPanel;
 import processing.core.PVector;
 
-public abstract class Button {
+public abstract class Button{
 	protected PVector pos;
 	protected double scale;
 	protected BufferedImage img;
