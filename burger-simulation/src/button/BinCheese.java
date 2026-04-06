@@ -8,7 +8,13 @@ public class BinCheese extends Button {
 	// constructor
 	public BinCheese(float x, float y, double s) {
 		super(x, y, s);
-		img = ImageLoader.loadImage("src/assets/binCheese.png");
+
+		try {
+			img = ImageLoader.loadImage("src/assets/binCheese.png");
+		} catch (Exception e) {
+			System.out.println("Error loading image: " + e.getMessage());
+		}
+
 		description = "Click and drag cheese to bun";
 	}
 

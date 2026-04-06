@@ -17,7 +17,13 @@ public class Pan extends Button {
 	// constructor
 	public Pan(float x, float y, double s) {
 		super(x, y, s);
-		img = ImageLoader.loadImage("src/assets/pan.png");
+
+		try {
+			img = ImageLoader.loadImage("src/assets/pan.png");
+		} catch (Exception e) {
+			System.out.println("Error loading image: " + e.getMessage());
+		}
+
 		sizzle = new Sizzle(new PVector(x, y - 50));// pan not centered due to handle
 		sizzleTimer = 0;
 		onFire = false;

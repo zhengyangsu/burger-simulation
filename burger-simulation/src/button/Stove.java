@@ -3,19 +3,19 @@ package button;
 import main.BurgerPanel;
 import util.ImageLoader;
 
-public class BtnExit extends Button {
+public class Stove extends Button {
 
 	// constructor
-	public BtnExit(float x, float y, double s) {
+	public Stove(float x, float y, double s) {
 		super(x, y, s);
 
 		try {
-			img = ImageLoader.loadImage("src/assets/BtnExit.png");
+			img = ImageLoader.loadImage("src/assets/stove.png");
 		} catch (Exception e) {
 			System.out.println("Error loading image: " + e.getMessage());
 		}
 
-		description = "Click to end game";
+		description = "Click and drag cheese to bun";
 	}
 
 	@Override

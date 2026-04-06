@@ -1,3 +1,14 @@
+/* burgerPanel.java
+ * hosting all the components, including buttons, fire fx, and burger ingredients generation
+ * handles all the interactions and state transitions of the game
+ * 
+ * ECOs
+ * complex shape with recursion for fire fx
+ * decorator pattern for burger ingredients
+ * FSM for game states
+ * factory pattern for buttons
+ */
+
 package main;
 
 import java.awt.Color;

@@ -1,13 +1,19 @@
+/*
+ * button/Button.java
+ * abstract class for buttons, including bins, ingredients, and other interactive elements
+ */
+
 package button;
 
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+
 import main.BurgerPanel;
 import processing.core.PVector;
 
-public abstract class Button{
+public abstract class Button {
 	protected PVector pos;
 	protected double scale;
 	protected BufferedImage img;
@@ -28,7 +34,7 @@ public abstract class Button{
 		g2.scale(scale, scale);
 		g2.drawImage(img, -img.getWidth() / 2, -img.getHeight() / 2, null);
 		g2.setTransform(transform);
-	};
+	}
 
 	public String descriptionInfo() {
 		return description;
@@ -36,9 +42,19 @@ public abstract class Button{
 
 	public String getName() {
 		return getClass().getSimpleName();
-	};
+	}
 
 	public Rectangle2D getBounds() {
+
+		try {
+			if (img == null) {
+				throw new Exception("Image not loaded: " + getName());
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return new Rectangle2D.Double(pos.x, pos.y, 0, 0); // Return an empty rectangle if image is missing
+		}
+
 		double width = img.getWidth() * scale;
 		double height = img.getHeight() * scale;
 

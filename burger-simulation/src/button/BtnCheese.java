@@ -8,14 +8,25 @@ public class BtnCheese extends IngredientDecorator {
 
 	public BtnCheese(float x, float y, double s) {
 		super(x, y, s);
-		// TODO Auto-generated constructor stub
-		img = ImageLoader.loadImage("src/assets/cheese.png");
+
+		try {
+			img = ImageLoader.loadImage("src/assets/cheese.png");
+		} catch (Exception e) {
+			System.out.println("Error loading image: " + e.getMessage());
+		}
+
 	}
 
 	// Override
 	public BtnCheese(IngredientDecorator base, float x, float y, double s) {
 		super(base, x, y, s);
-		img = ImageLoader.loadImage("src/assets/cheese.png");
+
+		try {
+			img = ImageLoader.loadImage("src/assets/cheese.png");
+		} catch (Exception e) {
+			System.out.println("Error loading image: " + e.getMessage());
+		}
+
 	}
 
 	@Override

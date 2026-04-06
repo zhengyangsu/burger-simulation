@@ -3,6 +3,7 @@ package util;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+
 import javax.imageio.ImageIO;
 
 public class ImageLoader {
@@ -13,11 +14,11 @@ public class ImageLoader {
 		try {
 			img = ImageIO.read(new File(imgFile));
 		} catch (IOException e) {
-			System.out.println("Oops, something wrong with your image file");
+			System.out.println("Something wrong with your image file");
 		}
 		return img;
 	}
-	
+
 	public static boolean saveImage(BufferedImage img, String fileName, String fileFormat) {
 		try {
 

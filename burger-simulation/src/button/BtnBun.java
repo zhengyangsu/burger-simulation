@@ -8,7 +8,13 @@ public class BtnBun extends Button {
 		super(x, y, s);
 		// TODO Auto-generated constructor stub
 		movable = true;
-		img = ImageLoader.loadImage("src/assets/buns.png");
+
+		try {
+			img = ImageLoader.loadImage("src/assets/buns.png");
+		} catch (Exception e) {
+			System.out.println("Error loading image: " + e.getMessage());
+		}
+
 		description = "Click and drag cheese to bun";
 	}
 

@@ -9,14 +9,26 @@ public class BtnBunTop extends IngredientDecorator {
 	public BtnBunTop(float x, float y, double s) {
 		super(x, y, s);
 		movable = true;
-		img = ImageLoader.loadImage("src/assets/bunTop.png");
+
+		try {
+			img = ImageLoader.loadImage("src/assets/bunTop.png");
+		} catch (Exception e) {
+			System.out.println("Error loading image: " + e.getMessage());
+		}
+
 		description = "Drag Bun Top to the burger stack.";
 	}
 
 	// Override
 	public BtnBunTop(IngredientDecorator base, float x, float y, double s) {
 		super(base, x, y, s);
-		img = ImageLoader.loadImage("src/assets/bunTop.png");
+
+		try {
+			img = ImageLoader.loadImage("src/assets/bunTop.png");
+		} catch (Exception e) {
+			System.out.println("Error loading image: " + e.getMessage());
+		}
+
 	}
 
 	@Override

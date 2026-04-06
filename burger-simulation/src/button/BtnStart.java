@@ -8,7 +8,13 @@ public class BtnStart extends Button {
 	// constructor
 	public BtnStart(float x, float y, double s) {
 		super(x, y, s);
-		img = ImageLoader.loadImage("src/assets/BtnStart.png");
+
+		try {
+			img = ImageLoader.loadImage("src/assets/BtnStart.png");
+		} catch (Exception e) {
+			System.out.println("Error loading image: " + e.getMessage());
+		}
+
 		description = "Click to start game";
 	}
 
