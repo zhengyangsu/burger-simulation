@@ -1,19 +1,21 @@
 /*
  * Sizzle effect on flying pan when place on top of Stove
- * 
+ * Implemented with Perlin noise
  * 
  * */
 
 package fx;
 
-import java.awt.*;
+import static util.Util.radians;
+import static util.Util.random;
+
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.Rectangle2D;
 
 import processing.core.PApplet;
 import processing.core.PVector;
-import static util.Util.*;
 
 public class Sizzle {
 	private PVector pos;

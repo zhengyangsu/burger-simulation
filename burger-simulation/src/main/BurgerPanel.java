@@ -40,10 +40,7 @@ import button.Ingredient;
 import button.IngredientDecorator;
 import button.Pan;
 import button.Stove;
-import ddf.minim.AudioPlayer;
-import ddf.minim.Minim;
 import processing.core.PVector;
-import util.MinimHelper;
 
 @SuppressWarnings("serial")
 public class BurgerPanel extends JPanel implements ActionListener {
@@ -70,8 +67,6 @@ public class BurgerPanel extends JPanel implements ActionListener {
 	private boolean completed;
 	private JFrame frame;
 	private Timer timer;
-	private Minim minim;
-	private AudioPlayer bkmusic, click, open, close, drag;
 	private StringBuilder collectedInfo;
 
 	// endregion
@@ -89,12 +84,10 @@ public class BurgerPanel extends JPanel implements ActionListener {
 		staticBtn = new HashMap<>();
 		counter = 0;
 		completed = false;
-		minim = new Minim(new MinimHelper());
 		timer = new Timer(30, this);
 		MyMouseListener ml = new MyMouseListener();
 
 		btnPopulate();
-		loadMusic();
 
 		addMouseListener(ml);
 		addMouseMotionListener(ml);
@@ -216,11 +209,6 @@ public class BurgerPanel extends JPanel implements ActionListener {
 		info.draw(g);
 	}
 
-	private void loadMusic() {
-		bkmusic = minim.loadFile("Mister_X.wav");
-		bkmusic.loop();
-	}
-
 	public class MyMouseListener extends MouseAdapter {
 
 		public void mouseMoved(MouseEvent e) {
@@ -275,7 +263,6 @@ public class BurgerPanel extends JPanel implements ActionListener {
 			case END:
 				if (staticBtn.get("BtnRestart").contains(mPos.x, mPos.y)) {
 					frame.dispose();
-					bkmusic.close();
 					new BurgerApp("BurgerApp");
 				}
 				break;
