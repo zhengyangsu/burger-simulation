@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 
 import main.BurgerPanel;
 import processing.core.PVector;
+import util.ImageLoader;
 
 public abstract class Button {
 	protected PVector pos;
@@ -26,6 +27,17 @@ public abstract class Button {
 		scale = s;
 		movable = false;
 		description = "";
+	}
+
+	protected void loadImage(String imagePath) {
+		try {
+			img = ImageLoader.loadImage(imagePath);
+			if (img == null) {
+				System.err.println("Warning: Failed to load image for " + getName() + ": " + imagePath);
+			}
+		} catch (Exception e) {
+			System.err.println("Error loading image in " + getName() + ": " + e.getMessage());
+		}
 	}
 
 	public void drawButton(Graphics2D g2) {
@@ -45,15 +57,6 @@ public abstract class Button {
 	}
 
 	public Rectangle2D getBounds() {
-
-		try {
-			if (img == null) {
-				throw new Exception("Image not loaded: " + getName());
-			}
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			return new Rectangle2D.Double(pos.x, pos.y, 0, 0); // Return an empty rectangle if image is missing
-		}
 
 		double width = img.getWidth() * scale;
 		double height = img.getHeight() * scale;

@@ -1,3 +1,7 @@
+/*
+ * code factory for creating buttons and burger ingredients
+ */
+
 package button;
 
 public class BtnFactory {

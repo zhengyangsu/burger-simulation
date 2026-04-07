@@ -2,11 +2,9 @@ package button;
 
 import java.awt.Graphics2D;
 
-import fx.Fire;
 import fx.Sizzle;
 import main.BurgerPanel;
 import processing.core.PVector;
-import util.ImageLoader;
 
 public class Pan extends Button {
 	Sizzle sizzle;
@@ -17,13 +15,7 @@ public class Pan extends Button {
 	// constructor
 	public Pan(float x, float y, double s) {
 		super(x, y, s);
-
-		try {
-			img = ImageLoader.loadImage("src/assets/pan.png");
-		} catch (Exception e) {
-			System.out.println("Error loading image: " + e.getMessage());
-		}
-
+		loadImage("src/assets/pan.png");
 		sizzle = new Sizzle(new PVector(x, y - 50));// pan not centered due to handle
 		sizzleTimer = 0;
 		onFire = false;
@@ -72,8 +64,9 @@ public class Pan extends Button {
 
 	}
 
-	public void onFire(Fire f) {
-		onFire = getBounds().intersects(f.getBounds());
+	public void onFire(Stove s) {
+		onFire = (getBounds().intersects(s.getBounds()) && s.isOn());
+
 	}
 
 }

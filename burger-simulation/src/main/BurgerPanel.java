@@ -39,9 +39,9 @@ import button.Button;
 import button.Ingredient;
 import button.IngredientDecorator;
 import button.Pan;
+import button.Stove;
 import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
-import fx.Fire;
 import processing.core.PVector;
 import util.MinimHelper;
 
@@ -65,7 +65,6 @@ public class BurgerPanel extends JPanel implements ActionListener {
 	private Table table;
 	private HashMap<String, Button> staticBtn;
 	private Button btnDragged;
-	private Fire fire;
 	private Ingredient burger;
 	private int counter;
 	private boolean completed;
@@ -73,6 +72,7 @@ public class BurgerPanel extends JPanel implements ActionListener {
 	private Timer timer;
 	private Minim minim;
 	private AudioPlayer bkmusic, click, open, close, drag;
+	private StringBuilder collectedInfo;
 
 	// endregion
 
@@ -82,23 +82,23 @@ public class BurgerPanel extends JPanel implements ActionListener {
 		setPreferredSize(new Dimension(W_WIDTH, W_HEIGHT));
 		this.frame = frame;
 
-		currentState = State.INTRO;
+		currentState = State.PLAY;
+		collectedInfo = new StringBuilder();
 		mPos = new PVector();
 		table = new Table("src/assets/intro.png");
 		staticBtn = new HashMap<>();
-		fire = new Fire(300, 365);
-		btnPopulate();
 		counter = 0;
 		completed = false;
-
 		minim = new Minim(new MinimHelper());
+		timer = new Timer(30, this);
+		MyMouseListener ml = new MyMouseListener();
+
+		btnPopulate();
 		loadMusic();
 
-		MyMouseListener ml = new MyMouseListener();
 		addMouseListener(ml);
 		addMouseMotionListener(ml);
 
-		timer = new Timer(30, this);
 		timer.start();
 	}
 
@@ -112,13 +112,16 @@ public class BurgerPanel extends JPanel implements ActionListener {
 		switch (currentState) {
 
 		case INTRO:
+			collectedInfo.setLength(0); // Clear collected info
 			displayInfo(g2, 920, 175, table.getInfo());
 			drawBtn(g2);
 			break;
 
 		case PLAY:
-			fire.drawFire(g2, 120, 10);
-			drawBtn(g2);
+			collectedInfo.setLength(0); // Clear collected info
+			drawBtn(g2); // Draw all buttons except Pan (includes stove area)
+			drawPanOnTop(g2); // Draw Pan on top of fire
+
 			if (btnDragged != null) {
 				btnDragged.drawButton(g2);
 			}
@@ -134,10 +137,11 @@ public class BurgerPanel extends JPanel implements ActionListener {
 					counter = 0;
 				}
 			}
-
+			displayInfo(g2, 100, 675, collectedInfo.toString());
 			break;
 
 		case END:
+			collectedInfo.setLength(0); // Clear collected info
 			displayInfo(g2, 120, 175, table.getInfo());
 			drawBtn(g2);
 			break;
@@ -154,7 +158,7 @@ public class BurgerPanel extends JPanel implements ActionListener {
 			break;
 
 		case PLAY:
-			((Pan) staticBtn.get("Pan")).onFire(fire);// Elevate fire
+			((Pan) staticBtn.get("Pan")).onFire((Stove) staticBtn.get("Stove"));// Elevate fire
 			break;
 
 		case END:
@@ -169,8 +173,9 @@ public class BurgerPanel extends JPanel implements ActionListener {
 		staticBtn.put("BinBun", new BinBun(150, 115, 1));
 		staticBtn.put("BinPatty", new BinPatty(310, 120, 1));
 		staticBtn.put("BinCheese", new BinCheese(470, 125, 1));
-		staticBtn.put("Pan", new Pan(710, 420, 1));
 		staticBtn.put("Board", new Board(900, 410, 1));
+		staticBtn.put("Stove", new Stove(340, 400, 1));
+		staticBtn.put("Pan", new Pan(710, 420, 1));
 		staticBtn.put("BtnStart", new BtnStart(1100, 675, 1));
 		staticBtn.put("BtnExit", new BtnExit(1100, 675, 1));
 		staticBtn.put("BtnRestart", new BtnRestart(1100, 675, 1));
@@ -178,19 +183,31 @@ public class BurgerPanel extends JPanel implements ActionListener {
 	}
 
 	private void drawBtn(Graphics2D g2) {
-		String hoverText = null;
 
 		for (Button b : staticBtn.values()) {
 
-			if (b.isVisible(currentState)) {
+			if (b.isVisible(currentState) && !(b instanceof Pan)) {
 				b.drawButton(g2);
 				if (b.isHovered()) {
-					hoverText = b.descriptionInfo();
+					collectInfo(b.descriptionInfo());
 				}
 			}
-
 		}
-		displayInfo(g2, 100, 675, hoverText);
+
+	}
+
+	private void drawPanOnTop(Graphics2D g2) {
+		Button panBtn = staticBtn.get("Pan");
+		if (panBtn != null && panBtn.isVisible(currentState)) {
+			panBtn.drawButton(g2);
+			if (panBtn.isHovered()) {
+				collectInfo(panBtn.descriptionInfo());
+			}
+		}
+	}
+
+	private void collectInfo(String s) {
+		collectedInfo.append(s).append(System.lineSeparator());
 	}
 
 	private void displayInfo(Graphics2D g, int x, int y, String s) {
@@ -200,7 +217,7 @@ public class BurgerPanel extends JPanel implements ActionListener {
 	}
 
 	private void loadMusic() {
-		bkmusic = minim.loadFile("Mister_X.mp3");
+		bkmusic = minim.loadFile("Mister_X.wav");
 		bkmusic.loop();
 	}
 
@@ -211,9 +228,27 @@ public class BurgerPanel extends JPanel implements ActionListener {
 			mPos.x = e.getX();
 			mPos.y = e.getY();
 
-			// chk mouse loc for btn description when hovering
+			// Only hover the topmost button (check in reverse order of drawing)
+			Button hoveredBtn = null;
+
+			// Check Pan first (drawn last, so it's on top)
+			Button panBtn = staticBtn.get("Pan");
+			if (panBtn != null && panBtn.isVisible(currentState) && panBtn.contains(mPos.x, mPos.y)) {
+				hoveredBtn = panBtn;
+			}
+			// If not hovering Pan, check other buttons
+			else {
+				for (Button b : staticBtn.values()) {
+					if (!(b instanceof Pan) && b.isVisible(currentState) && b.contains(mPos.x, mPos.y)) {
+						hoveredBtn = b;
+						break; // Found the topmost button, stop searching
+					}
+				}
+			}
+
+			// Update hover state for all buttons
 			for (Button b : staticBtn.values()) {
-				b.setHovered(b.contains(mPos.x, mPos.y));
+				b.setHovered(b == hoveredBtn);
 			}
 
 		}
@@ -232,7 +267,9 @@ public class BurgerPanel extends JPanel implements ActionListener {
 			case PLAY:
 				if (staticBtn.get("BtnExit").contains(mPos.x, mPos.y))
 					currentState = State.END;
-
+				else if (staticBtn.get("Stove").contains(mPos.x, mPos.y)) {
+					((Stove) staticBtn.get("Stove")).toggle();
+				}
 				break;
 
 			case END:
