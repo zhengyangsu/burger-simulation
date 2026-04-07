@@ -1,20 +1,13 @@
 package button;
 
 import main.BurgerPanel;
-import util.ImageLoader;
 
 public class BtnExit extends Button {
 
 	// constructor
 	public BtnExit(float x, float y, double s) {
 		super(x, y, s);
-
-		try {
-			img = ImageLoader.loadImage("src/assets/BtnExit.png");
-		} catch (Exception e) {
-			System.out.println("Error loading image: " + e.getMessage());
-		}
-
+		loadImage("src/assets/BtnExit.png");
 		description = "Click to end game";
 	}
 

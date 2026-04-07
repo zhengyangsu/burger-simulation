@@ -2,8 +2,6 @@ package button;
 
 import java.awt.Graphics2D;
 
-import util.ImageLoader;
-
 public class BtnPatty extends IngredientDecorator {
 	enum PattyState {
 		RAW, COOKED
@@ -15,40 +13,19 @@ public class BtnPatty extends IngredientDecorator {
 		super(x, y, s);
 		movable = true;
 		state = PattyState.RAW;
-
-		try {
-			img = ImageLoader.loadImage("src/assets/pattyRaw.png");
-		} catch (Exception e) {
-			System.out.println("Error loading image: " + e.getMessage());
-		}
-
+		loadImage("src/assets/pattyRaw.png");
 	}
 
-	// Override
 	public BtnPatty(IngredientDecorator base, float x, float y, double s) {
 		super(base, x, y, s);
 		state = PattyState.COOKED;
-
-		try {
-			img = ImageLoader.loadImage("src/assets/pattyCooked.png");
-		} catch (Exception e) {
-			System.out.println("Error loading image: " + e.getMessage());
-		}
-
+		loadImage("src/assets/pattyCooked.png");
 	}
 
 	public void changeState() {
 		if (state == PattyState.RAW) {
 			state = PattyState.COOKED;
-
-			try {
-				if (img == null)
-					throw new Exception("Image not loaded: " + getName());
-				img = ImageLoader.loadImage("src/assets/pattyCooked.png");
-			} catch (Exception e) {
-				System.out.println("Error loading image: " + e.getMessage());
-			}
-
+			loadImage("src/assets/pattyCooked.png");
 		}
 	}
 
