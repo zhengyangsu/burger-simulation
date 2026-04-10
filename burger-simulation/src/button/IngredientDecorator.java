@@ -24,7 +24,8 @@ public abstract class IngredientDecorator extends Button implements Ingredient {
 
 	@Override
 	public void decorate(Graphics2D g2) {
-		base.decorate(g2);
+		if (base != null)
+			base.decorate(g2);
 	}
 
 }
