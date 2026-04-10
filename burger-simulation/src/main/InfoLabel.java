@@ -1,3 +1,9 @@
+/*
+ * InfoLabel.java
+ * A class for displaying informational text on the screen. 
+ * It supports multi-line text and uses a custom font.
+ */
+
 package main;
 
 import java.awt.Color;
@@ -7,6 +13,7 @@ import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.geom.AffineTransform;
 import java.io.File;
+
 import processing.core.PVector;
 
 public class InfoLabel {
@@ -44,19 +51,18 @@ public class InfoLabel {
 		g.translate(pos.x, pos.y);
 		g.setFont(font);
 		g.setColor(Color.decode("#66472B"));
-		
-		String[] lines = text.split("\n");
-	    FontMetrics fm = g.getFontMetrics();
-	    int leading = fm.getHeight();
 
-	    for (int i = 0; i < lines.length; i++) {
-	        g.drawString(lines[i].toUpperCase(java.util.Locale.ROOT), 0, i * leading);
-	    }
-		
+		String[] lines = text.split("\n");
+		FontMetrics fm = g.getFontMetrics();
+		int leading = fm.getHeight();
+
+		for (int i = 0; i < lines.length; i++) {
+			g.drawString(lines[i].toUpperCase(java.util.Locale.ROOT), 0, i * leading);
+		}
 
 		g.setTransform(at);
 	}
-	
+
 	public void setPos(int x, int y) {
 		pos.x = x;
 		pos.y = y;

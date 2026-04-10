@@ -1,3 +1,8 @@
+/*
+ * IngredientDecorator.java
+ * 
+ */
+
 package button;
 
 import java.awt.Graphics2D;

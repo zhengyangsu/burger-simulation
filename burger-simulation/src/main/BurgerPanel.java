@@ -283,8 +283,8 @@ public class BurgerPanel extends JPanel implements ActionListener {
 
 			case END:
 				if (staticBtn.get("BtnRestart").contains(mPos.x, mPos.y)) {
-					player.stop();
 					frame.dispose();
+					player.stop();
 					new BurgerApp("BurgerApp");
 				}
 				break;

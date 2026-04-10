@@ -1,3 +1,8 @@
+/*
+ * BurgerApp.java
+ * Main class for the BurgerApp. Creates the JFrame and adds the BurgerPanel to it.
+ */
+
 package main;
 
 import javax.swing.JFrame;

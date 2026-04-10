@@ -1,3 +1,7 @@
+/*
+ * Music and sound effects player for the game.
+ */
+
 package sound;
 
 import ddf.minim.AudioPlayer;
