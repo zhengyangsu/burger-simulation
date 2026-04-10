@@ -22,16 +22,22 @@ public class Player {
 	public Player() {
 		minim = new Minim(new MinimHelper());
 
-		// music
-		bkmusic = minim.loadFile("Mister_X.wav");
-		sizzle = minim.loadFile("sizzle.wav");
-		fire = minim.loadFile("stove.wav");
+		try {
+			// music
+			bkmusic = minim.loadFile("Mister_X.wav");
+			sizzle = minim.loadFile("sizzle.wav");
+			fire = minim.loadFile("stove.wav");
 
-		// samples
-		click = minim.loadSample("click.wav");
-		released = minim.loadSample("released.wav");
-		drag = minim.loadSample("grab.wav");
-		pan = minim.loadSample("pan.wav");
+			// samples
+			click = minim.loadSample("click.wav");
+			released = minim.loadSample("released.wav");
+			drag = minim.loadSample("grab.wav");
+			pan = minim.loadSample("pan.wav");
+
+		} catch (Exception e) {
+			System.err.println("Error loading one or more audio files.");
+			e.printStackTrace();
+		}
 	}
 
 	public void play(String s) {

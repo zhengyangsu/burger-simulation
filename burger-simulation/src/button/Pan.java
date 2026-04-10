@@ -38,7 +38,8 @@ public class Pan extends Button {
 		if (patty != null) {
 			patty.setPos(pos.x, pos.y - 50);
 			patty.drawButton(g2);
-			sizzleTimer++;
+			if (onFire)
+				sizzleTimer++;
 			if (sizzleTimer > 60) { // after 1 second, patty is ready
 				pattyReady = true;
 				patty.changeState();

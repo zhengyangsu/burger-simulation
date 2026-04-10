@@ -104,21 +104,17 @@ public class BurgerPanel extends JPanel implements ActionListener {
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
+		// collectedInfo.setLength(0); // Clear collected info
 		table.drawKitchen(g2);
 
 		switch (currentState) {
 
 		case INTRO:
-
-			collectedInfo.setLength(0); // Clear collected info
-
 			displayInfo(g2, 920, 175, table.getInfo());
 			drawBtn(g2);
 			break;
 
 		case PLAY:
-			collectedInfo.setLength(0); // Clear collected info
 			drawBtn(g2); // Draw all buttons except Pan (includes stove area)
 			drawPanOnTop(g2); // Draw Pan on top of fire
 
@@ -137,16 +133,14 @@ public class BurgerPanel extends JPanel implements ActionListener {
 					counter = 0;
 				}
 			}
-			displayInfo(g2, 100, 675, collectedInfo.toString());
 			break;
 
 		case END:
-			collectedInfo.setLength(0); // Clear collected info
 			displayInfo(g2, 120, 175, table.getInfo());
 			drawBtn(g2);
 			break;
 		}
-
+		displayInfo(g2, 100, 675, collectedInfo.toString());
 	}
 
 	@Override
@@ -188,9 +182,6 @@ public class BurgerPanel extends JPanel implements ActionListener {
 
 			if (b.isVisible(currentState) && !(b instanceof Pan)) {
 				b.drawButton(g2);
-				if (b.isHovered()) {
-					collectInfo(b.descriptionInfo());
-				}
 			}
 		}
 
@@ -200,9 +191,6 @@ public class BurgerPanel extends JPanel implements ActionListener {
 		Button panBtn = staticBtn.get("Pan");
 		if (panBtn != null && panBtn.isVisible(currentState)) {
 			panBtn.drawButton(g2);
-			if (panBtn.isHovered()) {
-				collectInfo(panBtn.descriptionInfo());
-			}
 		}
 	}
 
@@ -223,7 +211,7 @@ public class BurgerPanel extends JPanel implements ActionListener {
 			mPos.x = e.getX();
 			mPos.y = e.getY();
 
-			// Only hover the topmost button (check in reverse order of drawing)
+			collectedInfo.setLength(0);
 			Button hoveredBtn = null;
 
 			// Check Pan first (drawn last, so it's on top)
@@ -244,6 +232,9 @@ public class BurgerPanel extends JPanel implements ActionListener {
 			// Update hover state for all buttons
 			for (Button b : staticBtn.values()) {
 				b.setHovered(b == hoveredBtn);
+				if (b.isHovered()) {
+					collectInfo(b.descriptionInfo());
+				}
 			}
 
 		}
