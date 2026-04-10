@@ -5,18 +5,21 @@ import java.awt.Graphics2D;
 import fx.Sizzle;
 import main.BurgerPanel;
 import processing.core.PVector;
+import sound.Player;
 
 public class Pan extends Button {
 	Sizzle sizzle;
 	BtnPatty patty;
 	boolean onFire, pattyReady;
 	int sizzleTimer;
+	private Player player;
 
 	// constructor
 	public Pan(float x, float y, double s) {
 		super(x, y, s);
 		loadImage("src/assets/pan.png");
 		sizzle = new Sizzle(new PVector(x, y - 50));// pan not centered due to handle
+		player = new Player();
 		sizzleTimer = 0;
 		onFire = false;
 		pattyReady = false;
@@ -66,7 +69,14 @@ public class Pan extends Button {
 
 	public void onFire(Stove s) {
 		onFire = (getBounds().intersects(s.getBounds()) && s.isOn());
+		if (onFire) {
+			player.loop("sizzle");
+		}
 
+		else {
+			player.pause("sizzle");
+			player.rewind("sizzle");
+		}
 	}
 
 }

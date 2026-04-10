@@ -41,6 +41,7 @@ import button.IngredientDecorator;
 import button.Pan;
 import button.Stove;
 import processing.core.PVector;
+import sound.Player;
 
 @SuppressWarnings("serial")
 public class BurgerPanel extends JPanel implements ActionListener {
@@ -63,6 +64,7 @@ public class BurgerPanel extends JPanel implements ActionListener {
 	private HashMap<String, Button> staticBtn;
 	private Button btnDragged;
 	private Ingredient burger;
+	private Player player;
 	private int counter;
 	private boolean completed;
 	private JFrame frame;
@@ -77,11 +79,12 @@ public class BurgerPanel extends JPanel implements ActionListener {
 		setPreferredSize(new Dimension(W_WIDTH, W_HEIGHT));
 		this.frame = frame;
 
-		currentState = State.PLAY;
+		currentState = State.INTRO;
 		collectedInfo = new StringBuilder();
 		mPos = new PVector();
 		table = new Table("src/assets/intro.png");
 		staticBtn = new HashMap<>();
+		player = new Player();
 		counter = 0;
 		completed = false;
 		timer = new Timer(30, this);
@@ -93,6 +96,8 @@ public class BurgerPanel extends JPanel implements ActionListener {
 		addMouseMotionListener(ml);
 
 		timer.start();
+		player.loop("bkmusic");
+
 	}
 
 	public void paintComponent(Graphics g) {
@@ -105,7 +110,9 @@ public class BurgerPanel extends JPanel implements ActionListener {
 		switch (currentState) {
 
 		case INTRO:
+
 			collectedInfo.setLength(0); // Clear collected info
+
 			displayInfo(g2, 920, 175, table.getInfo());
 			drawBtn(g2);
 			break;
@@ -245,23 +252,38 @@ public class BurgerPanel extends JPanel implements ActionListener {
 			mPos.x = e.getX();
 			mPos.y = e.getY();
 
+			player.play("click");
+
 			switch (currentState) {
 
 			case INTRO:
-				if (staticBtn.get("BtnStart").contains(mPos.x, mPos.y))
+				if (staticBtn.get("BtnStart").contains(mPos.x, mPos.y)) {
 					currentState = State.PLAY;
+				}
 				break;
 
 			case PLAY:
-				if (staticBtn.get("BtnExit").contains(mPos.x, mPos.y))
+				if (staticBtn.get("BtnExit").contains(mPos.x, mPos.y)) {
 					currentState = State.END;
+				}
+
 				else if (staticBtn.get("Stove").contains(mPos.x, mPos.y)) {
 					((Stove) staticBtn.get("Stove")).toggle();
+
+					if (((Stove) staticBtn.get("Stove")).isOn())
+						player.loop("fire");
+
+					else {
+						player.pause("fire");
+						player.rewind("fire");
+					}
+
 				}
 				break;
 
 			case END:
 				if (staticBtn.get("BtnRestart").contains(mPos.x, mPos.y)) {
+					player.stop();
 					frame.dispose();
 					new BurgerApp("BurgerApp");
 				}
@@ -273,6 +295,7 @@ public class BurgerPanel extends JPanel implements ActionListener {
 		public void mousePressed(MouseEvent e) {
 			mPos.x = e.getX();
 			mPos.y = e.getY();
+			player.play("drag");
 
 			for (Button b : staticBtn.values()) {
 				if (b.contains(mPos.x, mPos.y)) {
@@ -321,11 +344,14 @@ public class BurgerPanel extends JPanel implements ActionListener {
 			mPos.x = e.getX();
 			mPos.y = e.getY();
 
+			player.play("released");
+
 			if (btnDragged != null) {
 
 				if (staticBtn.get("Pan").contains(mPos.x, mPos.y) && btnDragged.getName().equals("BtnPatty")) {
 
 					((Pan) staticBtn.get("Pan")).flyPatty();
+					player.play("pan");
 				}
 
 				else if (staticBtn.get("Board").contains(mPos.x, mPos.y)) {
