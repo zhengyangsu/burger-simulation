@@ -1,6 +1,6 @@
 # Burger Simulation
 
-This is a Java-based burger-making simulation project (Eclipse-style project) containing source code, assets, and libraries needed to build and run the simulation.
+This is a Java-based burger-making simulation project containing source code, assets, and libraries needed to build and run the simulation.
 
 ## Summary
 
