@@ -41,4 +41,4 @@ Note: If the source files use package declarations, include the package-qualifie
 
 ## Licensing
 
-No license included.
+Apache-2.0 license
