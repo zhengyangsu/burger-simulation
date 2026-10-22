@@ -5,6 +5,7 @@ This is a Java-based burger-making simulation project containing source code, as
 ## Summary
 
 - Project files are in the `burger-simulation` subfolder.
+- A prebuilt Windows version (`BurgerSimulation.exe`) is in `burger-simulation/dist/BurgerSimulation/`.
 - Key folders:
   - `src/assets/` — images & sound files used by the app (png, wav, fonts).
   - `src/button/`, `src/main/`, `src/fx/`, `src/sound/`, `src/util/` — Java packages with source code.
@@ -29,6 +30,10 @@ The game flow, in order (left to right, top to bottom):
     <td align="center"><img src="docs/screenshots/06.png" width="50%" alt="6. Result"><br><sub>6. Result</sub></td>
   </tr>
 </table>
+
+## Download (Windows)
+
+A ready-to-run Windows build is in [`burger-simulation/dist/BurgerSimulation/`](burger-simulation/dist/BurgerSimulation/). Keep the whole folder together and double-click `BurgerSimulation.exe` (Java must be installed). The launcher starts `burger.jar` and loads the libraries in `lib/` and the images and sounds in `src/assets/` using relative paths, so do not move them apart.
 
 ## Requirements
 
