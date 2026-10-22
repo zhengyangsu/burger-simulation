@@ -17,16 +17,16 @@ The game flow, in order (left to right, top to bottom):
 
 <table>
   <tr>
-    <td align="center"><img src="docs/screenshots/01.png" width="100%" alt="1. Start screen"><br><sub>1. Start screen</sub></td>
-    <td align="center"><img src="docs/screenshots/02.png" width="100%" alt="2. Kitchen"><br><sub>2. Kitchen</sub></td>
+    <td align="center"><img src="docs/screenshots/01.png" width="50%" alt="1. Start screen"><br><sub>1. Start screen</sub></td>
+    <td align="center"><img src="docs/screenshots/02.png" width="50%" alt="2. Kitchen"><br><sub>2. Kitchen</sub></td>
   </tr>
   <tr>
-    <td align="center"><img src="docs/screenshots/03.png" width="100%" alt="3. Stove on"><br><sub>3. Stove on</sub></td>
-    <td align="center"><img src="docs/screenshots/04.png" width="100%" alt="4. Cooking the patty"><br><sub>4. Cooking the patty</sub></td>
+    <td align="center"><img src="docs/screenshots/03.png" width="50%" alt="3. Stove on"><br><sub>3. Stove on</sub></td>
+    <td align="center"><img src="docs/screenshots/04.png" width="50%" alt="4. Cooking the patty"><br><sub>4. Cooking the patty</sub></td>
   </tr>
   <tr>
-    <td align="center"><img src="docs/screenshots/05.png" width="100%" alt="5. Assembling"><br><sub>5. Assembling</sub></td>
-    <td align="center"><img src="docs/screenshots/06.png" width="100%" alt="6. Result"><br><sub>6. Result</sub></td>
+    <td align="center"><img src="docs/screenshots/05.png" width="50%" alt="5. Assembling"><br><sub>5. Assembling</sub></td>
+    <td align="center"><img src="docs/screenshots/06.png" width="50%" alt="6. Result"><br><sub>6. Result</sub></td>
   </tr>
 </table>
 
