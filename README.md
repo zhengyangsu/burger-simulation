@@ -13,20 +13,22 @@ This is a Java-based burger-making simulation project containing source code, as
 
 ## Screenshots
 
-The game flow, in order:
+The game flow, in order (left to right, top to bottom):
 
-1. **Start screen** — assemble a burger from bun, cheese and beef patty.
-   ![Start screen](docs/screenshots/01.png)
-2. **Kitchen** — pick ingredients from the trays; the stove and pan are ready.
-   ![Kitchen](docs/screenshots/02.png)
-3. **Stove on** — turn on the burner.
-   ![Stove on](docs/screenshots/03.png)
-4. **Cooking the patty** — the beef patty sizzles in the pan.
-   ![Cooking the patty](docs/screenshots/04.png)
-5. **Assembling** — the finished burger on the cutting board.
-   ![Assembling](docs/screenshots/05.png)
-6. **Result** — your burger is ready; restart to make another.
-   ![Result](docs/screenshots/06.png)
+<table>
+  <tr>
+    <td align="center"><img src="docs/screenshots/01.png" width="100%" alt="1. Start screen"><br><sub>1. Start screen</sub></td>
+    <td align="center"><img src="docs/screenshots/02.png" width="100%" alt="2. Kitchen"><br><sub>2. Kitchen</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/03.png" width="100%" alt="3. Stove on"><br><sub>3. Stove on</sub></td>
+    <td align="center"><img src="docs/screenshots/04.png" width="100%" alt="4. Cooking the patty"><br><sub>4. Cooking the patty</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/05.png" width="100%" alt="5. Assembling"><br><sub>5. Assembling</sub></td>
+    <td align="center"><img src="docs/screenshots/06.png" width="100%" alt="6. Result"><br><sub>6. Result</sub></td>
+  </tr>
+</table>
 
 ## Requirements
 
