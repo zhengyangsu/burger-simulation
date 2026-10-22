@@ -11,6 +11,23 @@ This is a Java-based burger-making simulation project containing source code, as
   - `src/lib/` — third-party JARs required at runtime (core.jar, minim, mp3spi, tritonus, etc.).
   - `.classpath`, `.project`, `.settings/` — Eclipse project metadata.
 
+## Screenshots
+
+The game flow, in order:
+
+1. **Start screen** — assemble a burger from bun, cheese and beef patty.
+   ![Start screen](docs/screenshots/01.png)
+2. **Kitchen** — pick ingredients from the trays; the stove and pan are ready.
+   ![Kitchen](docs/screenshots/02.png)
+3. **Stove on** — turn on the burner.
+   ![Stove on](docs/screenshots/03.png)
+4. **Cooking the patty** — the beef patty sizzles in the pan.
+   ![Cooking the patty](docs/screenshots/04.png)
+5. **Assembling** — the finished burger on the cutting board.
+   ![Assembling](docs/screenshots/05.png)
+6. **Result** — your burger is ready; restart to make another.
+   ![Result](docs/screenshots/06.png)
+
 ## Requirements
 
 - Java JDK (8 or newer recommended).
